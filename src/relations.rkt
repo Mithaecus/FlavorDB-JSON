@@ -4,6 +4,8 @@
 
 (require json)
 
+(define %category %empty-rel)
+
 (define (read-json-wrapper filename)
   (call-with-input-file filename read-json))
 
@@ -11,9 +13,9 @@
     (begin
         (define file-name (first list-of-files))
         (define data (read-json-wrapper file-name))
-        (define %category
-            (%rel ()
-            [((string->symbol (hash-ref data 'entity_alias)) (string->symbol (hash-ref data 'category)))]))
+        (%assert! %category ()
+            [((string->symbol (hash-ref data 'entity_alias)) 
+              (string->symbol (hash-ref data 'category)))])
         (%which ()
             (%category 'bread 'bakery))))
 
